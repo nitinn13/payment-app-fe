@@ -127,7 +127,7 @@ export default function Contacts() {
         <CircuitLines />
 
         <div className="relative z-10">
-          <DashboardHeader user={{ name: "Neo", email: "neo@neonpay.com" }} />
+          <DashboardHeader  />
 
           <div className="flex items-center justify-center min-h-[calc(100vh-100px)] px-4">
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative">
@@ -156,7 +156,7 @@ export default function Contacts() {
       <CircuitLines />
 
       <div className="relative z-10">
-        <DashboardHeader user={{ name: "Neo", email: "neo@neonpay.com" }} />
+        <DashboardHeader />
 
         {/* Header Section */}
         <motion.div

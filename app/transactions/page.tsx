@@ -105,7 +105,7 @@ export default function Transactions() {
       <CircuitLines />
 
       <div className="relative z-10">
-        <DashboardHeader user={{ name: "Neo", email: "neo@neonpay.com" }} />
+        <DashboardHeader />
 
         {/* Header Section */}
         <motion.div
