@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 240 10% 95%;
+
+    --card: 240 10% 4%;
+    --card-foreground: 240 10% 95%;
+
+    --popover: 240 10% 4%;
+    --popover-foreground: 240 10% 95%;
+
+    --primary: 190 95% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 10%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 240 5% 15%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 170 95% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 5% 15%;
+    --input: 240 5% 15%;
+    --ring: 190 95% 55%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 211, 238, 0.8);
+}
+
+/* Gradient text animation */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 5s ease infinite;
+}
+
+/* Cyberpunk grid lines */
+.cyber-grid {
+  background-image: linear-gradient(to right, rgba(34, 211, 238, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 211, 238, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
