@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRouter } from "next/navigation"
@@ -17,6 +16,7 @@ export default function Login() {
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [showDemoHint, setShowDemoHint] = useState(false)
   const router = useRouter()
 
   const passwordInputRef = useRef<HTMLInputElement>(null)
@@ -32,7 +32,6 @@ export default function Login() {
         password
       });
 
-      
       localStorage.setItem('token', response.data.token);
       router.push('/dashboard');
     } catch (error) {
@@ -41,6 +40,19 @@ export default function Login() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleDemoLogin = () => {
+    setEmail('nitin@gmail.com')
+    setPassword('pass')
+    setShowDemoHint(true)
+    
+    // Auto-submit after filling credentials
+    setTimeout(() => {
+      if (loginButtonRef.current) {
+        loginButtonRef.current.click()
+      }
+    }, 500)
   }
 
   const handleEmailKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
@@ -156,6 +168,26 @@ export default function Login() {
                       </motion.div>
                     )}
                   </AnimatePresence>
+
+                  {/* Demo Login Button */}
+                  <div className="relative">
+                    <button
+                      onClick={handleDemoLogin}
+                      className="w-full mb-4 py-2.5 text-sm font-medium rounded-xl border border-cyan-800/50 text-cyan-400 hover:text-cyan-300 hover:border-cyan-500/50 transition-all duration-200 hover:bg-cyan-900/20"
+                    >
+                      Try Demo Account
+                    </button>
+                    
+                    {showDemoHint && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="absolute -top-8 left-0 right-0 text-center text-xs text-cyan-400"
+                      >
+                        Using demo credentials: nitin@gmail.com / pass
+                      </motion.div>
+                    )}
+                  </div>
 
                   {/* Login Button */}
                   <NeonButton
