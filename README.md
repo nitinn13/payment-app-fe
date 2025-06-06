@@ -52,6 +52,3 @@ A secure, scalable, and responsive full-stack digital wallet application built w
 - [Razorpay](https://razorpay.com/) – Seamless payment integration for wallet top-up
 
 ---
-
-## 📂 Project Structure
-
