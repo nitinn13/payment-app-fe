@@ -23,6 +23,7 @@ import GlitchText from "@/components/glitch-text"
 import NeonButton from "@/components/neon-button"
 import LoadingSpinner from "@/components/loading-spinner"
 import { getContacts } from "@/lib/api"
+import ParticleField from "@/components/particle-field"
 
 interface Contact {
   id?: string
@@ -93,8 +94,20 @@ export default function Contacts() {
   }
 
   if (loading) {
-    return <LoadingSpinner />
-  }
+      return (
+        <div className="min-h-screen bg-black relative overflow-hidden">
+          <ParticleField/>
+          <CyberGrid />
+  
+          <div className="relative z-10 flex items-center justify-center min-h-screen">
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
+              <div className="w-16 h-16 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+              <p className="text-cyan-400 text-lg">Loading Contacts...</p>
+            </motion.div>
+          </div>
+        </div>
+      )
+    }
 
   if (error) {
     return (

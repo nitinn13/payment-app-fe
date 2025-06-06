@@ -14,6 +14,7 @@ import LoadingSpinner from "@/components/loading-spinner"
 import CircuitLines from "@/components/circuit-lines"
 import { getTransactions } from "@/lib/api"
 import type { Transaction } from "@/lib/types"
+import ParticleField from "@/components/particle-field"
 
 export default function Transactions() {
   const [data, setData] = useState<Transaction[]>([])
@@ -96,8 +97,20 @@ export default function Transactions() {
   const netBalance = totalReceived - totalSent
 
   if (loading) {
-    return <LoadingSpinner />
-  }
+      return (
+        <div className="min-h-screen bg-black relative overflow-hidden">
+          <ParticleField/>
+          <CyberGrid />
+  
+          <div className="relative z-10 flex items-center justify-center min-h-screen">
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
+              <div className="w-16 h-16 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+              <p className="text-cyan-400 text-lg">Loading profile...</p>
+            </motion.div>
+          </div>
+        </div>
+      )
+    }
 
   return (
     <div className="min-h-screen bg-black text-gray-200 relative overflow-hidden">
