@@ -22,6 +22,7 @@ import DashboardHeader from "@/components/dashboard-header"
 import GlitchText from "@/components/glitch-text"
 import NeonButton from "@/components/neon-button"
 import LoadingSpinner from "@/components/loading-spinner"
+import { getContacts } from "@/lib/api"
 
 interface Contact {
   id?: string
@@ -45,37 +46,23 @@ export default function Contacts() {
   const router = useRouter()
 
   useEffect(() => {
-    const fetchContacts = async () => {
-      setLoading(true)
-      setError(null)
-      try {
-        const response = await fetch('https://payment-app-backend-dulq.onrender.com/user/all-users', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token') || ''}`
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch contacts');
-        }
-
-        const result = await response.json();
-
-        // Handle different possible response structures
-        const contactsData: Contact[] = result.contacts || result.users || result.data || [];
-        setContacts(contactsData);
-      } catch (error) {
-        console.error("Error fetching contacts:", error)
-        setError("Failed to fetch contacts. Please try again.")
-      } finally {
-        setLoading(false)
-      }
+  const fetchContacts = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const contactsData = await getContacts();
+      setContacts(contactsData);
+    } catch (error) {
+      console.error("Error fetching contacts:", error);
+      setError("Failed to fetch contacts. Please try again.");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    fetchContacts()
-  }, [])
+  fetchContacts();
+}, []);
 
   const filteredContacts = contacts.filter((contact) => {
     const matchesSearch =

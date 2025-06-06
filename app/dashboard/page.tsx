@@ -13,7 +13,6 @@ import {
   ChevronRight,
   Activity,
   Bell,
-  Settings,
   Plus,
   Eye,
   EyeOff,
@@ -25,6 +24,7 @@ import {
   Wallet,
   Shield,
   Menu,
+  LogOutIcon,
 } from "lucide-react"
 import CyberGrid from "@/components/cyber-grid"
 import ParticleField from "@/components/particle-field"
@@ -32,9 +32,9 @@ import NeonButton from "@/components/neon-button"
 import GlitchText from "@/components/glitch-text"
 import LoadingSpinner from "@/components/loading-spinner"
 import Link from "next/link"
-import axios from "axios";
-import type {UserType , Transaction} from "@/lib/types"
-
+import type { UserType, Transaction } from "@/lib/types"
+import { getContacts, getUserProfile, getBalance, getTransactions } from "@/lib/api"
+import { useRouter } from "next/navigation"
 
 interface UserDetails {
   name: string
@@ -71,6 +71,7 @@ export default function Dashboard() {
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [error, setError] = useState<string | null>(null)
   const [activeFilter, setActiveFilter] = useState("all")
+  const router = useRouter()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,72 +79,48 @@ export default function Dashboard() {
       setError(null)
 
       try {
-        // Simulate API calls with mock data for demo
-        await new Promise((resolve) => setTimeout(resolve, 2000))
+        const [userProfile, contacts, balance, transactions] = await Promise.all([
+          getUserProfile(),
+          getContacts(),
+          getBalance(),
+          getTransactions()
+        ])
 
-        const mockUsers: UserType[] = [
-          { id: "1", name: "Alex Chen", upiId: "alex@neonpay", status: "online" },
-          { id: "2", name: "Sarah Kim", upiId: "sarah@neonpay", status: "online" },
-          { id: "3", name: "Mike Johnson", upiId: "mike@neonpay", status: "offline" },
-          { id: "4", name: "Emma Wilson", upiId: "emma@neonpay", status: "online" },
-          { id: "5", name: "David Lee", upiId: "david@neonpay", status: "offline" },
-          { id: "6", name: "Lisa Wang", upiId: "lisa@neonpay", status: "online" },
-        ]
+        if (userProfile) {
+          setMe({
+            name: userProfile.name,
+            email: userProfile.email,
+            upiId: userProfile.upiId
+          })
 
-        const mockTransactions: Transaction[] = [
-          {
-            id: "1",
-            transactionType: "received",
-            senderUpiId: "alex@neonpay",
-            receiverUpiId: "me@neonpay",
-            amount: 250,
-            category: "Payment",
-            createdAt: new Date().toISOString(),
-          },
-          {
-            id: "2",
-            transactionType: "sent",
-            senderUpiId: "me@neonpay",
-            receiverUpiId: "sarah@neonpay",
-            amount: 150,
-            category: "Transfer",
-            createdAt: new Date(Date.now() - 86400000).toISOString(),
-          },
-          {
-            id: "3",
-            transactionType: "received",
-            senderUpiId: "mike@neonpay",
-            receiverUpiId: "me@neonpay",
-            amount: 500,
-            category: "Payment",
-            createdAt: new Date(Date.now() - 172800000).toISOString(),
-          },
-          {
-            id: "4",
-            transactionType: "sent",
-            senderUpiId: "me@neonpay",
-            receiverUpiId: "emma@neonpay",
-            amount: 75,
-            category: "Food",
-            createdAt: new Date(Date.now() - 259200000).toISOString(),
-          },
-          {
-            id: "5",
-            transactionType: "received",
-            senderUpiId: "david@neonpay",
-            receiverUpiId: "me@neonpay",
-            amount: 320,
-            category: "Refund",
-            createdAt: new Date(Date.now() - 345600000).toISOString(),
-          },
-        ]
+          // Transform contacts to UserType with default values
+          if (contacts) {
+            setUsers(contacts.map(contact => ({
+              ...contact,
+              email: contact.upiId, // Using UPI ID as email fallback
+              username: contact.upiId.split('@')[0] || 'user',
+              createdAt: new Date().toISOString(),
+              password: '', // Never include real password
+              status: "online" // Adding status field
+            })))
+          }
+        }
 
-        const mockNotifications: Notification[] = [
+        if (balance !== null) {
+          setBalance(balance)
+        }
+
+        if (transactions) {
+          setTransactions(transactions)
+        }
+
+        // Mock notifications
+        const mockNotifications = [
           {
             id: "1",
             type: "success",
             title: "Payment Received",
-            message: "You received $250 from Alex Chen",
+            message: "Your recent payment was successful",
             time: "2 min ago",
             read: false,
           },
@@ -154,25 +131,17 @@ export default function Dashboard() {
             message: "Your account security has been enhanced",
             time: "1 hour ago",
             read: false,
-          },
-          {
-            id: "3",
-            type: "warning",
-            title: "Low Balance Alert",
-            message: "Your balance is below $100",
-            time: "3 hours ago",
-            read: true,
-          },
+          }
         ]
+        setNotifications(mockNotifications as Notification[])
 
-        setUsers(mockUsers)
-        setBalance(12500)
-        setMe({ name: "Neo", email: "neo@neonpay.com", upiId: "neo@neonpay" })
-        setTransactions(mockTransactions)
-        setNotifications(mockNotifications)
       } catch (err: any) {
         setError(err.message || "Failed to fetch dashboard data")
         console.error(err)
+
+        // Fallback data
+        setMe({ name: "Neo", email: "neo@neonpay.com", upiId: "neo@neonpay" })
+        setBalance(0)
       } finally {
         setIsLoading(false)
       }
@@ -180,6 +149,11 @@ export default function Dashboard() {
 
     fetchData()
   }, [])
+
+  function handleLogout() {
+    localStorage.removeItem("token")
+    router.push("/")
+  }
 
   const filteredUsers = users.filter(
     (user) =>
@@ -256,6 +230,7 @@ export default function Dashboard() {
     )
   }
 
+
   return (
     <div className="min-h-screen bg-black text-gray-200 relative overflow-hidden">
       <ParticleField />
@@ -296,18 +271,24 @@ export default function Dashboard() {
                     )}
                   </button>
                 </div>
-                <button className="p-3 text-gray-400 hover:text-cyan-400 hover:bg-cyan-900/20 rounded-xl transition-all duration-200">
-                  <Settings className="w-5 h-5" />
+                <button
+                  onClick={handleLogout}
+                  className="p-3 text-gray-400 hover:text-cyan-400 hover:bg-cyan-900/20 rounded-xl transition-all duration-200">
+                  <LogOutIcon className="w-5 h-5" />
                 </button>
-                <div className="flex items-center space-x-3 bg-gray-900/50 rounded-xl p-2 border border-cyan-900/30">
-                  <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
-                    <span className="text-black font-bold text-sm">{me.name.charAt(0)}</span>
+                <Link href="/profile">
+                  <div className="flex items-center space-x-3 bg-gray-900/50 rounded-xl p-2 border border-cyan-900/30">
+
+                    <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
+                      <span className="text-black font-bold text-sm">{me.name.charAt(0)}</span>
+                    </div>
+                    <div className="hidden sm:block">
+                      <p className="text-gray-300 text-sm font-medium">{me.name}</p>
+                      <p className="text-gray-500 text-xs">{me.upiId}</p>
+                    </div>
+
                   </div>
-                  <div className="hidden sm:block">
-                    <p className="text-gray-300 text-sm font-medium">{me.name}</p>
-                    <p className="text-gray-500 text-xs">{me.upiId}</p>
-                  </div>
-                </div>
+                </Link>
                 <button className="md:hidden p-3 text-gray-400 hover:text-cyan-400 hover:bg-cyan-900/20 rounded-xl transition-all duration-200">
                   <Menu className="w-5 h-5" />
                 </button>
@@ -334,7 +315,7 @@ export default function Dashboard() {
                 </h1>
                 <p className="text-gray-400">Here's what's happening with your money today.</p>
               </div>
-              
+
             </div>
           </motion.div>
 
@@ -524,7 +505,7 @@ export default function Dashboard() {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {quickActions.map((action, index) => (
-                
+
                 <motion.button
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
@@ -535,19 +516,19 @@ export default function Dashboard() {
                   className={`${action.bgColor} hover:bg-opacity-80 rounded-xl p-6 border border-cyan-900/30 hover:border-cyan-500/50 transition-all duration-200 group backdrop-blur-sm`}
                 >
                   <Link href={action.link} >
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-md rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div
-                      className={`relative w-12 h-12 bg-gradient-to-r ${action.color} rounded-xl flex items-center justify-center text-black mb-4 group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      <action.icon className="w-6 h-6" />
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-md rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div
+                        className={`relative w-12 h-12 bg-gradient-to-r ${action.color} rounded-xl flex items-center justify-center text-black mb-4 group-hover:scale-110 transition-transform duration-300`}
+                      >
+                        <action.icon className="w-6 h-6" />
+                      </div>
                     </div>
-                  </div>
-                  <h4 className="font-semibold text-gray-100 mb-1 text-left">{action.title}</h4>
-                  <p className="text-sm text-gray-400 text-left">{action.desc}</p>
+                    <h4 className="font-semibold text-gray-100 mb-1 text-left">{action.title}</h4>
+                    <p className="text-sm text-gray-400 text-left">{action.desc}</p>
                   </Link>
                 </motion.button>
-                
+
               ))}
             </div>
           </motion.div>
@@ -644,10 +625,12 @@ export default function Dashboard() {
                 </div>
 
                 <div className="p-4 border-t border-cyan-900/30">
-                  <button className="w-full text-cyan-400 hover:text-cyan-300 font-medium text-sm flex items-center justify-center space-x-1 transition-colors">
-                    <span>View All Transactions</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
+                  <Link href="/transactions">
+                    <button className="w-full text-cyan-400 hover:text-cyan-300 font-medium text-sm flex items-center justify-center space-x-1 transition-colors">
+                      <span>View All Transactions</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </Link>
                 </div>
               </div>
             </motion.div>
@@ -696,10 +679,7 @@ export default function Dashboard() {
                               <div className="w-8 h-8 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
                                 {user.name.charAt(0)}
                               </div>
-                              <div
-                                className={`absolute -bottom-1 -right-1 w-2 h-2 rounded-full border border-gray-900 ${user.status === "online" ? "bg-green-400" : "bg-gray-500"
-                                  }`}
-                              ></div>
+
                             </div>
                             <div>
                               <p className="font-medium text-gray-100 text-sm">{user.name}</p>
@@ -713,10 +693,11 @@ export default function Dashboard() {
                       ))}
                     </AnimatePresence>
                   </div>
-
-                  <button className="w-full mt-4 py-2 text-teal-400 hover:text-teal-300 font-medium text-sm border border-teal-800/50 hover:border-teal-500/50 rounded-lg transition-all duration-200 hover:bg-teal-900/20">
-                    View All Contacts
-                  </button>
+                  <Link href="/contacts">
+                    <button className="w-full mt-4 py-2 text-teal-400 hover:text-teal-300 font-medium text-sm border border-teal-800/50 hover:border-teal-500/50 rounded-lg transition-all duration-200 hover:bg-teal-900/20">
+                      View All Contacts
+                    </button>
+                  </Link>
                 </div>
               </div>
 

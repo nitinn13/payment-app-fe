@@ -64,3 +64,6 @@ export interface SendMoneyForm {
   receiverUpiId: string;
   note?: string;
 }
+export interface ContactWithStatus extends Contact {
+  status: string;
+}

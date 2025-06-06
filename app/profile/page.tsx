@@ -24,6 +24,7 @@ import {
 import Link from "next/link"
 import ParticleField from "@/components/particle-field"
 import CyberGrid from "@/components/cyber-grid"
+import { getUserProfile } from "@/lib/api"
 
 interface UserData {
   name?: string
@@ -41,27 +42,25 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    const getData = async () => {
+    const loadUserData = async () => {
+      setLoading(true);
       try {
-        const response = await fetch("https://payment-app-backend-dulq.onrender.com/user/me", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-          },
-        })
-        const responseData = await response.json()
-        if (responseData.user) {
-          setData(responseData.user)
+        const userProfile = await getUserProfile();
+        if (userProfile) {
+          setData(userProfile);
+        } else {
+          throw new Error('User profile data not available');
         }
       } catch (error) {
-        console.error("Error fetching user data:", error)
+        console.error("Failed to load user profile:", error);
+        // setError('Failed to load profile data');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    getData()
-  }, [])
+    };
+
+    loadUserData();
+  }, []);
 
   const formatDate = (dateString?: string): string => {
     if (!dateString) return ""
