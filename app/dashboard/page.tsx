@@ -335,134 +335,114 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
             {/* Main Balance Card */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="lg:col-span-2"
-            >
-              <div className="relative group">
-                {/* Outer glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/30 to-blue-500/30 blur-2xl rounded-3xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, delay: 0.1 }}
+  className="w-full col-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2"
+>
+  <div className="relative group">
+    {/* Outer glow effect */}
+    <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/30 to-blue-500/30 blur-2xl rounded-3xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
 
-                {/* Main card */}
-                <div className="relative bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 rounded-3xl border border-cyan-400/30 backdrop-blur-xl overflow-hidden">
-                  {/* Animated background pattern */}
-                  <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-cyan-400/20 via-transparent to-blue-500/20"></div>
-                    <div className="absolute top-10 right-10 w-32 h-32 bg-cyan-400/20 rounded-full blur-3xl animate-pulse"></div>
-                    <div className="absolute bottom-10 left-10 w-24 h-24 bg-blue-400/20 rounded-full blur-2xl animate-pulse delay-1000"></div>
-                  </div>
+    {/* Main card */}
+    <div className="relative bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 rounded-3xl border border-cyan-400/30 backdrop-blur-xl overflow-hidden">
+      {/* Animated background pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-cyan-400/20 via-transparent to-blue-500/20"></div>
+        <div className="absolute top-10 right-10 w-32 h-32 bg-cyan-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-10 left-10 w-24 h-24 bg-blue-400/20 rounded-full blur-2xl animate-pulse delay-1000"></div>
+      </div>
 
-                  {/* Circuit lines decoration */}
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-50"></div>
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-50"></div>
+      {/* Circuit lines decoration */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-50"></div>
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-50"></div>
 
-                  <div className="relative z-10 p-8">
-                    {/* Header section */}
-                    <div className="flex justify-between items-start mb-8">
-                      <div className="space-y-2">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                          <p className="text-cyan-300 text-sm font-medium uppercase tracking-wider">Total Balance</p>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                          <h3 className="text-5xl font-bold text-white tracking-tight">
-                            {balanceVisible ? `$${balance.toLocaleString()}` : "••••••••"}
-                          </h3>
-                          <button
-                            onClick={() => setBalanceVisible(!balanceVisible)}
-                            className="p-3 hover:bg-cyan-400/10 rounded-xl transition-all duration-200 border border-cyan-400/20 hover:border-cyan-400/40 group"
-                          >
-                            {balanceVisible ? (
-                              <EyeOff className="w-5 h-5 text-cyan-300 group-hover:text-cyan-200" />
-                            ) : (
-                              <Eye className="w-5 h-5 text-cyan-300 group-hover:text-cyan-200" />
-                            )}
-                          </button>
-                        </div>
-                        <p className="text-gray-400 text-sm">Available for transactions</p>
-                      </div>
+      <div className="relative z-10 p-4 sm:p-6 md:p-8">
+        {/* Header section */}
+        <div className="flex flex-col sm:flex-row justify-between items-start mb-6 sm:mb-8 gap-4 sm:gap-0">
+          <div className="space-y-2 w-full sm:w-auto">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+              <p className="text-cyan-300 text-sm font-medium uppercase tracking-wider">Total Balance</p>
+            </div>
+            <div className="flex items-center space-x-4">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+                {balanceVisible ? `$${balance.toLocaleString()}` : "••••••••"}
+              </h3>
+              <button
+                onClick={() => setBalanceVisible(!balanceVisible)}
+                className="p-2 sm:p-3 hover:bg-cyan-400/10 rounded-xl transition-all duration-200 border border-cyan-400/20 hover:border-cyan-400/40 group"
+              >
+                {balanceVisible ? (
+                  <EyeOff className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-300 group-hover:text-cyan-200" />
+                ) : (
+                  <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-300 group-hover:text-cyan-200" />
+                )}
+              </button>
+            </div>
+            <p className="text-gray-400 text-sm">Available for transactions</p>
+          </div>
 
-                      {/* Action buttons */}
-                      <div className="flex flex-col space-y-3">
-                        <NeonButton href="/topup" color="cyan" size="sm" className="whitespace-nowrap">
-                          <Plus className="w-4 h-4 mr-2" />
-                          Add Funds
-                        </NeonButton>
-                        <button className="px-4 py-2 text-cyan-300 border border-cyan-400/30 rounded-xl hover:bg-cyan-400/10 transition-all duration-200 text-sm font-medium">
-                          Transfer
-                        </button>
-                      </div>
-                    </div>
+          {/* Action buttons */}
+          <div className="flex flex-row sm:flex-col space-x-3 sm:space-x-0 sm:space-y-3 w-full sm:w-auto">
+            <NeonButton href="/topup" color="cyan" size="sm" className="whitespace-nowrap flex-1 sm:flex-none text-center justify-center">
+              <Plus className="w-4 h-4 mr-2" />
+              Add Funds
+            </NeonButton>
+            <button className="px-3 sm:px-4 py-2 text-cyan-300 border border-cyan-400/30 rounded-xl hover:bg-cyan-400/10 transition-all duration-200 text-sm font-medium flex-1 sm:flex-none text-center">
+              Transfer
+            </button>
+          </div>
+        </div>
 
-                    {/* Stats grid */}
-                    <div className="grid grid-cols-3 gap-6">
-                      {/* Monthly Income */}
-                      <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-2xl p-5 border border-green-400/20 backdrop-blur-sm">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="w-10 h-10 bg-green-400/20 rounded-xl flex items-center justify-center">
-                            <TrendingUp className="w-5 h-5 text-green-400" />
-                          </div>
-                          <span className="text-green-400 text-xs font-semibold bg-green-400/10 px-2 py-1 rounded-full">
-                            +12%
-                          </span>
-                        </div>
-                        <p className="text-2xl font-bold text-white mb-1">$1,234</p>
-                        <p className="text-green-300 text-sm font-medium">Monthly Income</p>
-                      </div>
-
-                      {/* Total Transactions */}
-                      <div className="bg-gradient-to-br from-blue-900/20 to-cyan-900/20 rounded-2xl p-5 border border-blue-400/20 backdrop-blur-sm">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="w-10 h-10 bg-blue-400/20 rounded-xl flex items-center justify-center">
-                            <Activity className="w-5 h-5 text-blue-400" />
-                          </div>
-                          <span className="text-blue-400 text-xs font-semibold bg-blue-400/10 px-2 py-1 rounded-full">
-                            {transactions.length}
-                          </span>
-                        </div>
-                        <p className="text-2xl font-bold text-white mb-1">156</p>
-                        <p className="text-blue-300 text-sm font-medium">Transactions</p>
-                      </div>
-
-                      {/* Savings Goal */}
-                      <div className="bg-gradient-to-br from-orange-900/20 to-yellow-900/20 rounded-2xl p-5 border border-orange-400/20 backdrop-blur-sm">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="w-10 h-10 bg-orange-400/20 rounded-xl flex items-center justify-center">
-                            <Wallet className="w-5 h-5 text-orange-400" />
-                          </div>
-                          <span className="text-orange-400 text-xs font-semibold bg-orange-400/10 px-2 py-1 rounded-full">
-                            78%
-                          </span>
-                        </div>
-                        <p className="text-2xl font-bold text-white mb-1">$3,900</p>
-                        <p className="text-orange-300 text-sm font-medium">Savings Goal</p>
-                      </div>
-                    </div>
-
-                    {/* Quick actions bar */}
-                    <div className="mt-6 pt-6 border-t border-cyan-400/20">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <button className="flex items-center space-x-2 text-cyan-300 hover:text-cyan-200 transition-colors">
-                            <Download className="w-4 h-4" />
-                            <span className="text-sm font-medium">Export</span>
-                          </button>
-                          <button className="flex items-center space-x-2 text-cyan-300 hover:text-cyan-200 transition-colors">
-                            <RefreshCw className="w-4 h-4" />
-                            <span className="text-sm font-medium">Refresh</span>
-                          </button>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xs text-gray-400">Last updated</p>
-                          <p className="text-sm text-cyan-300 font-medium">Just now</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        {/* Stats grid */}
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+          {/* Monthly Income */}
+          <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-2xl p-4 sm:p-5 border border-green-400/20 backdrop-blur-sm">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-400/20 rounded-xl flex items-center justify-center">
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
               </div>
-            </motion.div>
+              <span className="text-green-400 text-xs font-semibold bg-green-400/10 px-2 py-1 rounded-full">
+                +12%
+              </span>
+            </div>
+            <p className="text-xl sm:text-2xl font-bold text-white mb-1">$1,234</p>
+            <p className="text-green-300 text-sm font-medium">Monthly Income</p>
+          </div>
+
+          {/* Total Transactions */}
+          <div className="bg-gradient-to-br from-blue-900/20 to-cyan-900/20 rounded-2xl p-4 sm:p-5 border border-blue-400/20 backdrop-blur-sm">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-400/20 rounded-xl flex items-center justify-center">
+                <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
+              </div>
+              <span className="text-blue-400 text-xs font-semibold bg-blue-400/10 px-2 py-1 rounded-full">
+                {transactions.length}
+              </span>
+            </div>
+            <p className="text-xl sm:text-2xl font-bold text-white mb-1">156</p>
+            <p className="text-blue-300 text-sm font-medium">Transactions</p>
+          </div>
+
+          {/* Savings Goal */}
+          <div className="bg-gradient-to-br from-orange-900/20 to-yellow-900/20 rounded-2xl p-4 sm:p-5 border border-orange-400/20 backdrop-blur-sm">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-400/20 rounded-xl flex items-center justify-center">
+                <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />
+              </div>
+              <span className="text-orange-400 text-xs font-semibold bg-orange-400/10 px-2 py-1 rounded-full">
+                78%
+              </span>
+            </div>
+            <p className="text-xl sm:text-2xl font-bold text-white mb-1">$3,900</p>
+            <p className="text-orange-300 text-sm font-medium">Savings Goal</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</motion.div>
 
             {/* Stats Cards */}
             <motion.div
