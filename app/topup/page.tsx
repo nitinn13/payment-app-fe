@@ -18,6 +18,7 @@ export default function TopUpPage() {
     console.log("TopUp successful!")
     // You might want to refresh the user's balance here
   }
+  console.log(process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID)
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
