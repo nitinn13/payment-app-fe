@@ -39,6 +39,7 @@ import MatrixRain from "@/components/matrix-rain"
 import SpotlightEffect from "@/components/spotlight-effect"
 import EnergyOrb from "@/components/energy-orb"
 import HologramText from "@/components/hologram-text"
+import { useRouter } from "next/navigation"
 
 
 export default function NeonPayApp() {
@@ -51,6 +52,7 @@ export default function NeonPayApp() {
   const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
   const scale = useTransform(scrollYProgress, [0, 0.3], [1, 0.8])
   const y = useTransform(scrollYProgress, [0, 1], [0, -200])
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,12 +75,12 @@ export default function NeonPayApp() {
   return (
     <div className="min-h-screen bg-black text-gray-200 overflow-hidden relative">
       {/* Advanced Background Effects */}
-      <AdvancedParticleSystem/>
-      <NeuralNetwork/>
-      <MatrixRain/>
+      <AdvancedParticleSystem />
+      <NeuralNetwork />
+      <MatrixRain />
 
-      
-      <SpotlightEffect/>
+
+      <SpotlightEffect />
 
       {/* Floating Energy Orbs */}
       <motion.div
@@ -154,10 +156,9 @@ export default function NeonPayApp() {
                 />
                 <Zap className="w-6 h-6 text-black relative z-10" />
               </motion.div>
-              <HologramText
-                text="NeonPay"
-                className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-teal-500 bg-clip-text text-transparent"
-              />
+              <div className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-teal-500 bg-clip-text text-transparent">
+                NeonPay
+              </div>
             </motion.div>
 
             <nav className="hidden md:flex space-x-8 relative z-10">
@@ -466,7 +467,11 @@ export default function NeonPayApp() {
                 transition={{ duration: 1, delay: 1.6 }}
                 className="flex flex-col sm:flex-row gap-6"
               >
-                <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.98 }} className="relative">
+                <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.98 }} className="relative"
+                  onClick={() => {
+                    router.push("/login")
+                  }}
+                >
                   <NeonButton href="/signup" color="cyan" size="lg" className="p-4 rounded-xl">
                     <motion.span className="flex items-center text-lg " whileHover={{ x: 3 }}>
                       Enter the Future
